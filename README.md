@@ -6,23 +6,23 @@ This script will scrape thepartysource.com for this information and present it m
 
 ## Phases of Development
 
-# Current Phase
+### Current Phase
 Scraping information from a given product page.
 
-# Next Phases
+### Next Phases
 1. Gather products
-..* give a search phrase to thepartysource.com
-..* collect output into an array (in-stock and low-stock only)
+* give a search phrase to thepartysource.com
+* collect output into an array (in-stock and low-stock only)
 2. Gather product details
-..* cost,  liter amount (L), quantity on hand (QOH), type, brand, etc.
+* cost,  liter amount (L), quantity on hand (QOH), type, brand, etc.
 3. Analysis
-..* calculate cost per bottle (CPB) after discount,  what's low? alternative comparison, etc.
+* calculate cost per bottle (CPB) after discount,  what's low? alternative comparison, etc.
 4. User Input
-..* override analysis with user input
-....* only search an sticker price range (filter out low and high end, etc.)
-....* limit total amount to spend
-....* limit total L to buy
+* override analysis with user input
+..* only search an sticker price range (filter out low and high end, etc.)
+..* limit total amount to spend
+..* limit total L to buy
 
-# Future Phases
+### Future Phases
 * Web App
 * Mobile App
