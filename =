@@ -16,23 +16,22 @@
 
 from bs4 import BeautifulSoup
 import urllib
-myURL = 'https://www.thepartysource.com/express/item.php?id=7' #166
-
-def 
+myURL = 'https://www.thepartysource.com/express/item.php?id=8'
 html = urllib.urlopen(myURL)
 soup = BeautifulSoup(html)
 table = soup.find('table', attrs={'class':'itemHotspot'})
 #print table
 rows = table.find_all('tr')
 for row in rows:
-	cols = row.find_all('td') #whole column
-	colhead = row.strong.string	#just column header
-	if colhead == 'Price:':		#get Price
-		if row.find('font'):	#if special price
-			print row.find('font').contents[0].strip()
-		else:
-			print row.find(colspan='2').contents[1]
-	elif colhead == 'Qty Available':#currnet QOH
-		print cols[1].string
+	cols = row.find_all('td')
+#	colshead = row.strong.string
+	colshead = row.find_all('strong')
+	print colshead
+#rows = table_body.find_all('tr')
+
+
+
+
+
 
 
