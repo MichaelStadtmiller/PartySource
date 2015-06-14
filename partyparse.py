@@ -16,23 +16,19 @@
 
 from bs4 import BeautifulSoup
 import urllib
-myURL = 'https://www.thepartysource.com/express/item.php?id=7' #166
+def getQOH(myURL):
+	html = urllib.urlopen(myURL)
+	soup = BeautifulSoup(html)
+	table = soup.find('table', attrs={'class':'itemHotspot'})
+	rows = table.find_all('tr')
+	for row in rows:
+		cols = row.find_all('td') #whole column
+		if row.strong.string == 'Qty Available':#current QOH
+			print cols[1].string
 
-def 
-html = urllib.urlopen(myURL)
-soup = BeautifulSoup(html)
-table = soup.find('table', attrs={'class':'itemHotspot'})
-#print table
-rows = table.find_all('tr')
-for row in rows:
-	cols = row.find_all('td') #whole column
-	colhead = row.strong.string	#just column header
-	if colhead == 'Price:':		#get Price
-		if row.find('font'):	#if special price
-			print row.find('font').contents[0].strip()
-		else:
-			print row.find(colspan='2').contents[1]
-	elif colhead == 'Qty Available':#currnet QOH
-		print cols[1].string
+def getProducts(search):
+	url = 'https://www.thepartysource.com/express/results.php?o=0&t=&s='+search
+	print url
 
-
+getQOH('https://www.thepartysource.com/express/item.php?id=1850')
+getProducts('BOURBON')
