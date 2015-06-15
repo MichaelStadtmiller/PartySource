@@ -10,7 +10,7 @@ This script will scrape thepartysource.com for this information and present it m
 Scraping information from a given product page.
 
 ### Next Phases
-[ ] Gather products
+1. Gather products
   * give a search phrase to thepartysource.com
   * collect output into an array (in-stock and low-stock only)
 2. Gather product details
