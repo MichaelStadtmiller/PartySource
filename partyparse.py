@@ -1,5 +1,4 @@
-## test page https://www.thepartysource.com/express/item.php?id=12325
-## Beautiful Soup document http://www.crummy.com/software/BeautifulSoup/bs4/doc/#a-string
+## Beautiful Soup http://www.crummy.com/software/BeautifulSoup/bs4/doc/#a-string
 ## http://stackoverflow.com/questions/23377533/python-beautifulsoup-parsing-table
 
 
