@@ -17,7 +17,9 @@ from bs4 import BeautifulSoup
 import urllib
 
 def main():
-	getProducts('ST.+REMY+VSOP+AUTHENTIC+FRENCH+BRANDY')
+	search = raw_input('Enter a search term: ')
+	URL = 'https://www.thepartysource.com/express/results.php?o=0&t=&s='+search.replace(' ','+')#+'&sort=invQOH'
+	getProducts(URL)
 
 def getQOH(myURL):
 	html = urllib.urlopen(myURL)
@@ -29,8 +31,7 @@ def getQOH(myURL):
 		if row.strong.string == 'Qty Available':#current QOH
 			print cols[1].string
 
-def getProducts(search):
-	myURL = 'https://www.thepartysource.com/express/results.php?o=0&t=&s='+search.replace(' ','+')+'&sort=invQOH'
+def getProducts(myURL):
 	html = urllib.urlopen(myURL)
 	soup = BeautifulSoup(html)
 	table = soup.find('table', attrs={'class':'searchResults'})
@@ -38,11 +39,22 @@ def getProducts(search):
 	for row in rows:
 		cols = row.find_all('td') #whole colum
 		if cols[5].string.strip() in ['low-stock','in-stock']:
-			for a in range(0,len(cols)-2):
+#			for a in range(0,len(cols)-2):
+			for a in range (1,2):
 				print cols[a].string.strip()
 				if a==1:
 					getQOH('https://www.thepartysource.com/express/'+cols[a].find('a').get('href'))
-	
+	#more product - next page is coming back sorted and is duplicating from the first page and/or missing product completely
+	rs = table.find_all('tr', class_=lambda x : x=='legend')
+	for r in reversed(rs):
+		cs = r.find_all('td')
+		try:
+			URL = 'https://www.thepartysource.com/express/'+cs[2].find('a').get('href')
+			getProducts(URL)
+			break
+		except:
+			break
+
 if __name__ == '__main__':
 	main()
 
