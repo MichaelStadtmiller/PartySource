@@ -15,6 +15,10 @@
 
 from bs4 import BeautifulSoup
 import urllib
+
+def main():
+	getProducts('ST.+REMY+VSOP+AUTHENTIC+FRENCH+BRANDY')
+
 def getQOH(myURL):
 	html = urllib.urlopen(myURL)
 	soup = BeautifulSoup(html)
@@ -26,8 +30,22 @@ def getQOH(myURL):
 			print cols[1].string
 
 def getProducts(search):
-	url = 'https://www.thepartysource.com/express/results.php?o=0&t=&s='+search
-	print url
+	myURL = 'https://www.thepartysource.com/express/results.php?o=0&t=&s='+search.replace(' ','+')+'&sort=invQOH'
+	html = urllib.urlopen(myURL)
+	soup = BeautifulSoup(html)
+	table = soup.find('table', attrs={'class':'searchResults'})
+	rows = table.find_all('tr', class_=lambda x : x !='legend')
+	for row in rows:
+		cols = row.find_all('td') #whole colum
+		if cols[5].string.strip() in ['low-stock','in-stock']:
+			for a in range(0,len(cols)-2):
+				print cols[a].string.strip()
+				if a==1:
+					getQOH('https://www.thepartysource.com/express/'+cols[a].find('a').get('href'))
+	
+if __name__ == '__main__':
+	main()
 
-getQOH('https://www.thepartysource.com/express/item.php?id=1850')
-getProducts('BOURBON')
+
+
+
