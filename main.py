@@ -39,8 +39,8 @@ def getProducts(myURL):
 	for row in rows:
 		cols = row.find_all('td') #whole colum
 		if cols[5].string.strip() in ['low-stock','in-stock']:
-#			for a in range(0,len(cols)-2): #uncomment to get all data
-			for a in range (1,2): #test to write name ONLY - delete when writing to csv.
+			for a in range(0,len(cols)-2): #uncomment to get all data
+#			for a in range (1,2): #test to write name ONLY - delete when writing to csv.
 				print cols[a].string.strip()
 				if a==1:
 					getQOH('https://www.thepartysource.com/express/'+cols[a].find('a').get('href'))
