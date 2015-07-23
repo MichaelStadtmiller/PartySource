@@ -32,12 +32,15 @@ def getPriceQOH(myURL):
         if row.strong.string == 'Price:':
             try:
                 price = row.strong.find_next_sibling("font").string.strip()
+                retail = row.strong.nextSibling.next_element.next_element.next_element.string.strip()
             except:
                 price = cols[0].next_element.next_element.next_element.strip()
+                retail = price
         if row.strong.string == 'Qty Available':#current QOH
             QOH = cols[1].string.strip()
-    print 'Price: ' + price
-    print 'QOH: ' + QOH
+    print price
+    print retail
+    print QOH
 
 def getProductDetail(myURL):
     html = requests.get(myURL)
@@ -63,7 +66,7 @@ def getProductDetail(myURL):
     container = rows[13].find_all('a')[1].string
     brand = rows[14].find_all('a')[0].string 
     
-    print 'name: ' + name
+    print name
     print img
     print desc
     print category
