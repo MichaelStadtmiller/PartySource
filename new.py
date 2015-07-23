@@ -13,21 +13,39 @@ from bs4 import BeautifulSoup
 import requests
 
 def main():
-    search = raw_input('Enter a search term: ')
+#    search = raw_input('Enter a search term: ')
+    search = 'Bulleit'
     URL = 'https://www.thepartysource.com/express/results.php?o=0&t=&s='+search.replace(' ','+')#+'&sort=invQOH'
     getProducts(URL)
 #    URL = 'https://www.thepartysource.com/express/item.php?id=26663'
 #    getQOH(URL)
 
-def getProductDetail(myURL):
+def getPriceQOH(myURL):
     html = requests.get(myURL)
     soup = BeautifulSoup(html.text)
+    
+    #get Price/QOH
     table = soup.find('table', attrs={'class':'itemHotspot'})
     rows = table.find_all('tr')
     for row in rows:
-        cols = row.find_all('td') #whole column
+        cols = row.find_all('td')
+        if row.strong.string == 'Price:':
+            try:
+                price = row.strong.find_next_sibling("font").string.strip()
+            except:
+                price = cols[0].next_element.next_element.next_element.strip()
         if row.strong.string == 'Qty Available':#current QOH
-            print cols[1].string
+            QOH = cols[1].string.strip()
+    print 'Price: ' + price
+    print 'QOH: ' + QOH
+
+def getProductDetail(myURL):
+    html = requests.get(myURL)
+    soup = BeautifulSoup(html.text)
+    table = soup.find('table', attrs={'class':'itemDisplay'})
+    rows = table.find_all('tr', class_=lambda x : x !='legend')
+    
+
 
 def getProducts(myURL):
     html = requests.get(myURL)
@@ -37,6 +55,7 @@ def getProducts(myURL):
     for row in rows:
         cols = row.find_all('td') #whole colum
         if cols[5].string.strip() in ['low-stock','in-stock']:
+#            getPriceQOH('https://www.thepartysource.com/express/'+cols[1].find('a').get('href'))
             getProductDetail('https://www.thepartysource.com/express/'+cols[1].find('a').get('href'))
 
 	#more product - next page is coming back sorted and is duplicating from the first page and/or missing product completely
