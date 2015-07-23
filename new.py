@@ -14,7 +14,7 @@ import requests
 
 def main():
 #    search = raw_input('Enter a search term: ')
-    search = 'Bulleit'
+    search = 'Four Roses'
     URL = 'https://www.thepartysource.com/express/results.php?o=0&t=&s='+search.replace(' ','+')#+'&sort=invQOH'
     getProducts(URL)
 #    URL = 'https://www.thepartysource.com/express/item.php?id=26663'
@@ -43,9 +43,40 @@ def getProductDetail(myURL):
     html = requests.get(myURL)
     soup = BeautifulSoup(html.text)
     table = soup.find('table', attrs={'class':'itemDisplay'})
-    rows = table.find_all('tr', class_=lambda x : x !='legend')
-    
+    rows = table.find_all('tr')
 
+    name = rows[0].find('strong').string
+    #Image and Description
+    cols = rows[7].find_all('td')
+    img=cols[0].find('img')['src']
+    desc=cols[1].string
+
+    category = rows[8].find_all('a')[0].string
+    origin = rows[8].find_all('a')[1].string
+    classi = rows[9].find_all('a')[0].string
+    region = rows[9].find_all('a')[1].string
+    prodtype = rows[10].find_all('a')[0].string
+    ABV = rows[10].find_all('a')[1].string
+    style = rows[11].find_all('a')[0].string
+    size = rows[11].find_all('a')[1].string
+    age = rows[13].find_all('a')[0].string
+    container = rows[13].find_all('a')[1].string
+    brand = rows[14].find_all('a')[0].string 
+    
+    print 'name: ' + name
+    print img
+    print desc
+    print category
+    print origin
+    print classi
+    print region
+    print prodtype
+    print ABV
+    print style
+    print size
+    print age
+    print container
+    print brand
 
 def getProducts(myURL):
     html = requests.get(myURL)
@@ -55,7 +86,7 @@ def getProducts(myURL):
     for row in rows:
         cols = row.find_all('td') #whole colum
         if cols[5].string.strip() in ['low-stock','in-stock']:
-#            getPriceQOH('https://www.thepartysource.com/express/'+cols[1].find('a').get('href'))
+            getPriceQOH('https://www.thepartysource.com/express/'+cols[1].find('a').get('href'))
             getProductDetail('https://www.thepartysource.com/express/'+cols[1].find('a').get('href'))
 
 	#more product - next page is coming back sorted and is duplicating from the first page and/or missing product completely
