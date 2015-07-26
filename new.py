@@ -13,12 +13,10 @@ from bs4 import BeautifulSoup
 import requests
 
 def main():
-#    search = raw_input('Enter a search term: ')
-    search = 'Four Roses'
+    search = raw_input('Enter a search term: ')
+#    search = 'Four Roses'
     URL = 'https://www.thepartysource.com/express/results.php?o=0&t=&s='+search.replace(' ','+')#+'&sort=invQOH'
     getProducts(URL)
-#    URL = 'https://www.thepartysource.com/express/item.php?id=26663'
-#    getQOH(URL)
 
 def getPriceQOH(myURL):
     html = requests.get(myURL)
@@ -41,6 +39,7 @@ def getPriceQOH(myURL):
     print price
     print retail
     print QOH
+    print "------------------------"
 
 def getProductDetail(myURL):
     html = requests.get(myURL)
@@ -60,23 +59,33 @@ def getProductDetail(myURL):
     region = rows[9].find_all('a')[1].string
     prodtype = rows[10].find_all('a')[0].string
     ABV = rows[10].find_all('a')[1].string
-    style = rows[11].find_all('a')[0].string
-    size = rows[11].find_all('a')[1].string
+    style1 = rows[11].find_all('a')[0].string
+    package = rows[11].find_all('a')[1].string
+    style2 = rows[12].find_all('a')[0].string
+    volume = rows[12].find_all('a')[1].string
     age = rows[13].find_all('a')[0].string
     container = rows[13].find_all('a')[1].string
     brand = rows[14].find_all('a')[0].string 
-    
-    print name
-    print img
-    print desc
+   
+    i = volume.index(' ')
+    size = volume[:i]
+    UOM = volume[-(i):]
+ 
+    print name.strip()
+    print img.strip()
+    print desc.strip()
     print category
     print origin
     print classi
     print region
     print prodtype
     print ABV
-    print style
-    print size
+    print style1
+    print package
+    print '-------' + size
+    print '-------' + UOM
+    print style2
+    print volume
     print age
     print container
     print brand
@@ -89,8 +98,11 @@ def getProducts(myURL):
     for row in rows:
         cols = row.find_all('td') #whole colum
         if cols[5].string.strip() in ['low-stock','in-stock']:
-            getPriceQOH('https://www.thepartysource.com/express/'+cols[1].find('a').get('href'))
-            getProductDetail('https://www.thepartysource.com/express/'+cols[1].find('a').get('href'))
+            ext = cols[1].find('a').get('href')
+            j = len(ext)-(ext.index("="))-1
+            print ext[-j:]
+            getProductDetail('https://www.thepartysource.com/express/'+ext)
+            getPriceQOH('https://www.thepartysource.com/express/'+ext)
 
 	#more product - next page is coming back sorted and is duplicating from the first page and/or missing product completely
     rs = table.find_all('tr', class_=lambda x : x=='legend')
